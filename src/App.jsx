@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = 'https://corelab-api-vf72.onrender.com'; 
+const API_URL = 'https://corelab-api-1v72.onrender.com'; 
 
 function App() {
   const [items, setItems] = useState([]);
