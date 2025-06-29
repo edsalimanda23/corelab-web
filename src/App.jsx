@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 
+const API_URL = 'https://corelab-api-vf72.onrender.com'; 
+
 function App() {
   const [items, setItems] = useState([]);
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/items')
+    fetch(`${API_URL}/items`)
       .then(res => res.json())
       .then(data => setItems(data))
       .catch(err => console.error('Erro ao buscar itens:', err));
@@ -18,7 +20,7 @@ function App() {
       return;
     }
 
-    fetch('http://localhost:3000/items', {
+    fetch(`${API_URL}/items`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, descricao })
@@ -35,7 +37,7 @@ function App() {
   const apagarItem = (id) => {
     if (!window.confirm('Tem certeza que deseja apagar este item?')) return;
 
-    fetch(`http://localhost:3000/items/${id}`, {
+    fetch(`${API_URL}/items/${id}`, {
       method: 'DELETE'
     })
       .then(() => {
@@ -53,7 +55,7 @@ function App() {
       return;
     }
 
-    fetch(`http://localhost:3000/items/${id}`, {
+    fetch(`${API_URL}/items/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome: novoNome, descricao: novaDescricao })
