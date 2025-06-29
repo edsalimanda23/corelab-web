@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = 'https://corelab-api-1v72.onrender.com'; 
+const API_URL = 'https://corelab-api-1v72.onrender.com';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -78,7 +78,7 @@ function App() {
       boxShadow: '0 0 10px rgba(0,0,0,0.1)'
     }}>
       <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
-      
+
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {items.map(item => (
           <li key={item._id} style={{
@@ -92,7 +92,7 @@ function App() {
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
           }}>
             <div>
-              <strong>{item.nome}</strong> <br />
+              <strong>{item.nome}</strong><br />
               <small style={{ color: '#777' }}>{item.descricao}</small>
             </div>
             <div>
@@ -143,3 +143,4 @@ const inputStyle = {
 };
 
 export default App;
+
