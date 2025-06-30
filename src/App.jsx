@@ -69,74 +69,83 @@ function App() {
 
   return (
     <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ece9e6, #ffffff)',
       padding: '30px',
-      fontFamily: 'Arial, sans-serif',
-      maxWidth: '600px',
-      margin: 'auto',
-      backgroundColor: '#f9f9f9',
-      borderRadius: '8px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)'
+      fontFamily: 'Arial, sans-serif'
     }}>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
+      <div style={{
+        backgroundColor: '#fff',
+        borderRadius: '10px',
+        padding: '20px',
+        maxWidth: '600px',
+        width: '100%',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
+      }}>
+        <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {items.map(item => (
-          <li key={item._id} style={{
-            background: '#fff',
-            padding: '10px',
-            marginBottom: '10px',
-            borderRadius: '5px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-          }}>
-            <div>
-              <strong>{item.nome}</strong><br />
-              <small style={{ color: '#777' }}>{item.descricao}</small>
-            </div>
-            <div>
-              <button onClick={() => editarItem(item._id)} style={buttonStyle('#3498db')}>Editar</button>
-              <button onClick={() => apagarItem(item._id)} style={buttonStyle('#e74c3c')}>Apagar</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {items.map(item => (
+            <li key={item._id} style={{
+              background: '#f9f9f9',
+              padding: '10px',
+              marginBottom: '10px',
+              borderRadius: '5px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+            }}>
+              <div>
+                <strong>{item.nome}</strong><br />
+                <small style={{ color: '#777' }}>{item.descricao}</small>
+              </div>
+              <div>
+                <button onClick={() => editarItem(item._id)} style={buttonStyle('#3498db')}>Editar</button>
+                <button onClick={() => apagarItem(item._id)} style={buttonStyle('#e74c3c')}>Apagar</button>
+              </div>
+            </li>
+          ))}
+        </ul>
 
-      <h2 style={{ color: '#333' }}>➕ Criar novo item</h2>
-      <div style={{ display: 'flex', gap: '5px' }}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={nome}
-          onChange={e => setNome(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          type="text"
-          placeholder="Descrição"
-          value={descricao}
-          onChange={e => setDescricao(e.target.value)}
-          style={inputStyle}
-        />
-        <button onClick={criarItem} style={buttonStyle('#2ecc71')}>Criar</button>
+        <h2 style={{ color: '#333' }}>➕ Criar novo item</h2>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <input
+            type="text"
+            placeholder="Nome"
+            value={nome}
+            onChange={e => setNome(e.target.value)}
+            style={inputStyle}
+          />
+          <input
+            type="text"
+            placeholder="Descrição"
+            value={descricao}
+            onChange={e => setDescricao(e.target.value)}
+            style={inputStyle}
+          />
+          <button onClick={criarItem} style={buttonStyle('#2ecc71')}>Criar</button>
+        </div>
       </div>
     </div>
   );
 }
 
 const buttonStyle = (bgColor) => ({
-  backgroundColor: bgColor,
+  background: `linear-gradient(45deg, ${bgColor}, #6ab7ff)`,
   color: '#fff',
   border: 'none',
   borderRadius: '4px',
-  padding: '5px 10px',
-  marginLeft: '5px',
-  cursor: 'pointer'
+  padding: '6px 12px',
+  cursor: 'pointer',
+  transition: '0.3s'
 });
 
 const inputStyle = {
-  padding: '5px',
+  padding: '6px',
   borderRadius: '4px',
   border: '1px solid #ccc',
   flex: 1
