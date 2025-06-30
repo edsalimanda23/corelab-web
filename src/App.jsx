@@ -79,13 +79,15 @@ function App() {
             background: item.cor,
             padding: '10px',
             marginBottom: '10px',
-            borderRadius: '5px'
+            borderRadius: '5px',
+            border: item.favorito ? '2px solid gold' : '1px solid #ccc',
+            boxShadow: item.favorito ? '0 0 10px gold' : 'none'
           }}>
             <strong>{item.nome}</strong> - {item.descricao}
             {item.favorito && ' ⭐'}
-            <div>
-              <button onClick={() => toggleFavorito(item._id)}>Favorito</button>
-              <button onClick={() => mudarCor(item._id)}>Cor</button>
+            <div style={{ marginTop: '5px' }}>
+              <button onClick={() => toggleFavorito(item._id)}>Favorito</button>{' '}
+              <button onClick={() => mudarCor(item._id)}>Cor</button>{' '}
               <button onClick={() => apagarItem(item._id)}>Apagar</button>
             </div>
           </li>
@@ -93,9 +95,24 @@ function App() {
       </ul>
 
       <h2>Criar novo item</h2>
-      <input placeholder="Nome" value={nome} onChange={e => setNome(e.target.value)} />
-      <input placeholder="Descrição" value={descricao} onChange={e => setDescricao(e.target.value)} />
-      <input type="color" value={cor} onChange={e => setCor(e.target.value)} />
+      <input
+        placeholder="Nome"
+        value={nome}
+        onChange={e => setNome(e.target.value)}
+        style={{ marginRight: '5px' }}
+      />
+      <input
+        placeholder="Descrição"
+        value={descricao}
+        onChange={e => setDescricao(e.target.value)}
+        style={{ marginRight: '5px' }}
+      />
+      <input
+        type="color"
+        value={cor}
+        onChange={e => setCor(e.target.value)}
+        style={{ marginRight: '5px' }}
+      />
       <button onClick={criarItem}>Criar</button>
     </div>
   );
