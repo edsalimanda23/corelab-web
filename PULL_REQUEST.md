@@ -1,41 +1,27 @@
-#  Corelab Challenge — Fullstack Project
+# Frontend Pull Request
 
-## ✅ What was done
-- Complete CRUD for to-do items (create, read, update, delete)
-- Mark/unmark items as favorite (⭐)
-- Assign custom color to each item
-- Favorites displayed at the top of the list
-- Responsive layout on the frontend
-- RESTful API with Node.js + Express + MongoDB Atlas
-- Deployment on Render
+## Summary
 
-## ⚙ Technologies
-- **Backend:** Node.js, Express, MongoDB Atlas
-- **Frontend:** React
-- **Deploy:** Render
+- Refactored `App.jsx` to simplify the structure.
+- Removed features temporarily (favorites, color picker) to improve code clarity and stability.
+- Enhanced layout: applied modern design with gradient background, rounded corners, and shadows.
+- Added loading indicator to inform users when backend is starting up.
 
-## 💻 How to run locally
+## Future Improvements
 
-### Backend
+- Reintroduce "mark as favorite" functionality with visual highlighting.
+- Add color customization per item.
+- Implement filters by favorite status and color.
+- Add unit and integration tests.
+- Add Docker support and CI/CD pipeline.
+- Improve mobile responsiveness and accessibility.
+
+## How to Run Locally
+
 ```bash
-git clone https://github.com/edsalimanda23/corelab-api.git
-cd corelab-api
-npm install
-cp .env.example .env  # configure MONGO_URI and PORT
-npm start
-Frontend
-bash
-Copiar
-Editar
 git clone https://github.com/edsalimanda23/corelab-web.git
 cd corelab-web
 npm install
-npm run dev
-
-
- Future improvements
-Add tests
-
-Add CI/CD
-
-Dockerization
+npm start
+Production URL
+➡ https://corelab-frontend.onrender.com
