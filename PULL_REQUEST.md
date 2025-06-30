@@ -1,11 +1,11 @@
-# 🚀 Corelab Challenge — Fullstack Project
+#  Corelab Challenge — Fullstack Project
 
 ## ✅ What was done
 - Complete CRUD for to-do items (create, read, update, delete)
 - Mark/unmark items as favorite (⭐)
 - Assign custom color to each item
 - Favorites displayed at the top of the list
-- Responsive layout in the frontend
+- Responsive layout on the frontend
 - RESTful API with Node.js + Express + MongoDB Atlas
 - Deployment on Render
 
@@ -18,23 +18,22 @@
 
 ### Backend
 ```bash
-git clone <your-backend-repo-link>
+git clone https://github.com/edsalimanda23/corelab-api.git
 cd corelab-api
 npm install
 cp .env.example .env  # configure MONGO_URI and PORT
 npm start
-
-
 Frontend
 bash
 Copiar
 Editar
-git clone <your-frontend-repo-link>
+git clone https://github.com/edsalimanda23/corelab-web.git
 cd corelab-web
 npm install
 npm run dev
 
-Future improvements
+
+ Future improvements
 Add tests
 
 Add CI/CD
