@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = 'https://corelab-api-1v72.onrender.com';
+const API_URL = 'https://corelab-api-1v72.onrender.com'; 
 
 function App() {
   const [items, setItems] = useState([]);
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [cor, setCor] = useState('#ffffff');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${API_URL}/items`)
       .then(res => res.json())
       .then(data => {
-        const ordenado = data.sort((a, b) => b.favorito - a.favorito);
-        setItems(ordenado);
+        setItems(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Erro ao buscar itens:', err);
+        setLoading(false);
       });
   }, []);
 
@@ -26,98 +30,136 @@ function App() {
     fetch(`${API_URL}/items`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, descricao, cor })
+      body: JSON.stringify({ nome, descricao })
     })
       .then(res => res.json())
       .then(novoItem => {
-        setItems(prev => [...prev, novoItem].sort((a, b) => b.favorito - a.favorito));
+        setItems(prev => [...prev, novoItem]);
         setNome('');
         setDescricao('');
-        setCor('#ffffff');
-      });
-  };
-
-  const toggleFavorito = (id) => {
-    fetch(`${API_URL}/items/${id}/favorito`, { method: 'PUT' })
-      .then(res => res.json())
-      .then(itemAtualizado => {
-        setItems(prev => {
-          const atualizados = prev.map(i => i._id === id ? itemAtualizado : i);
-          return atualizados.sort((a, b) => b.favorito - a.favorito);
-        });
-      });
-  };
-
-  const mudarCor = (id) => {
-    const novaCor = prompt('Digite a nova cor (ex: #ff0000):');
-    if (!novaCor) return;
-
-    fetch(`${API_URL}/items/${id}/cor`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cor: novaCor })
-    })
-      .then(res => res.json())
-      .then(itemAtualizado => {
-        setItems(prev => prev.map(i => i._id === id ? itemAtualizado : i));
-      });
+      })
+      .catch(err => console.error('Erro ao criar item:', err));
   };
 
   const apagarItem = (id) => {
-    if (!window.confirm('Apagar item?')) return;
-    fetch(`${API_URL}/items/${id}`, { method: 'DELETE' })
-      .then(() => setItems(prev => prev.filter(i => i._id !== id)));
+    if (!window.confirm('Tem certeza que deseja apagar este item?')) return;
+
+    fetch(`${API_URL}/items/${id}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        setItems(prev => prev.filter(item => item._id !== id));
+      })
+      .catch(err => console.error('Erro ao apagar item:', err));
+  };
+
+  const editarItem = (id) => {
+    const novoNome = prompt('Novo nome:');
+    const novaDescricao = prompt('Nova descrição:');
+
+    if (!novoNome || !novaDescricao) {
+      alert('Nome e descrição são obrigatórios para editar!');
+      return;
+    }
+
+    fetch(`${API_URL}/items/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome: novoNome, descricao: novaDescricao })
+    })
+      .then(res => res.json())
+      .then(itemAtualizado => {
+        setItems(prev => prev.map(item => item._id === id ? itemAtualizado : item));
+      })
+      .catch(err => console.error('Erro ao editar item:', err));
   };
 
   return (
-    <div style={{ padding: '30px', maxWidth: '600px', margin: 'auto' }}>
-      <h1>🌟 Lista de Itens</h1>
+    <div style={{
+      padding: '30px',
+      fontFamily: 'Arial, sans-serif',
+      maxWidth: '600px',
+      margin: 'auto',
+      background: 'linear-gradient(135deg, #74ebd5, #ACB6E5)',
+      borderRadius: '10px',
+      boxShadow: '0 0 15px rgba(0,0,0,0.2)'
+    }}>
+      <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {items.map(item => (
-          <li key={item._id} style={{
-            background: item.cor,
-            padding: '10px',
-            marginBottom: '10px',
-            borderRadius: '5px',
-            border: item.favorito ? '2px solid gold' : '1px solid #ccc',
-            boxShadow: item.favorito ? '0 0 10px gold' : 'none',
-            transition: 'all 0.3s ease'
-          }}>
-            <strong>{item.nome}</strong> - {item.descricao}
-            {item.favorito && ' ⭐'}
-            <div style={{ marginTop: '5px' }}>
-              <button onClick={() => toggleFavorito(item._id)}>Favorito</button>{' '}
-              <button onClick={() => mudarCor(item._id)}>Cor</button>{' '}
-              <button onClick={() => apagarItem(item._id)}>Apagar</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <p style={{ textAlign: 'center', color: '#555' }}>
+          ⏳ Aguarde, o servidor está sendo iniciado...
+        </p>
+      ) : (
+        <>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {items.map(item => (
+              <li key={item._id} style={{
+                background: '#fff',
+                padding: '10px',
+                marginBottom: '10px',
+                borderRadius: '5px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+              }}>
+                <div>
+                  <strong>{item.nome}</strong> <br />
+                  <small style={{ color: '#777' }}>{item.descricao}</small>
+                </div>
+                <div>
+                  <button onClick={() => editarItem(item._id)} style={buttonStyle('#3498db')}>Editar</button>
+                  <button onClick={() => apagarItem(item._id)} style={buttonStyle('#e74c3c')}>Apagar</button>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-      <h2>Criar novo item</h2>
-      <input
-        placeholder="Nome"
-        value={nome}
-        onChange={e => setNome(e.target.value)}
-        style={{ marginRight: '5px' }}
-      />
-      <input
-        placeholder="Descrição"
-        value={descricao}
-        onChange={e => setDescricao(e.target.value)}
-        style={{ marginRight: '5px' }}
-      />
-      <input
-        type="color"
-        value={cor}
-        onChange={e => setCor(e.target.value)}
-        style={{ marginRight: '5px' }}
-      />
-      <button onClick={criarItem}>Criar</button>
+          {items.length === 0 && (
+            <p style={{ textAlign: 'center', color: '#777' }}>Nenhum item encontrado.</p>
+          )}
+        </>
+      )}
+
+      <h2 style={{ color: '#333' }}>➕ Criar novo item</h2>
+      <div style={{ display: 'flex', gap: '5px' }}>
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={e => setNome(e.target.value)}
+          style={inputStyle}
+        />
+        <input
+          type="text"
+          placeholder="Descrição"
+          value={descricao}
+          onChange={e => setDescricao(e.target.value)}
+          style={inputStyle}
+        />
+        <button onClick={criarItem} style={buttonStyle('#2ecc71')}>Criar</button>
+      </div>
     </div>
   );
 }
+
+const buttonStyle = (bgColor) => ({
+  backgroundColor: bgColor,
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  padding: '5px 10px',
+  marginLeft: '5px',
+  cursor: 'pointer'
+});
+
+const inputStyle = {
+  padding: '5px',
+  borderRadius: '4px',
+  border: '1px solid #ccc',
+  flex: 1
+};
 
 export default App;
 
