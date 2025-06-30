@@ -1,17 +1,24 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = 'https://corelab-api-1v72.onrender.com';
+const API_URL = 'https://corelab-api-1v72.onrender.com'; 
 
 function App() {
   const [items, setItems] = useState([]);
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${API_URL}/items`)
       .then(res => res.json())
-      .then(data => setItems(data))
-      .catch(err => console.error('Erro ao buscar itens:', err));
+      .then(data => {
+        setItems(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Erro ao buscar itens:', err);
+        setLoading(false);
+      });
   }, []);
 
   const criarItem = () => {
@@ -69,83 +76,86 @@ function App() {
 
   return (
     <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #ece9e6, #ffffff)',
       padding: '30px',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      maxWidth: '600px',
+      margin: 'auto',
+      background: 'linear-gradient(135deg, #74ebd5, #ACB6E5)',
+      borderRadius: '10px',
+      boxShadow: '0 0 15px rgba(0,0,0,0.2)'
     }}>
-      <div style={{
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        padding: '20px',
-        maxWidth: '600px',
-        width: '100%',
-        boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
-      }}>
-        <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
+      <h1 style={{ textAlign: 'center', color: '#333' }}>🌟 Lista de Itens</h1>
 
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {items.map(item => (
-            <li key={item._id} style={{
-              background: '#f9f9f9',
-              padding: '10px',
-              marginBottom: '10px',
-              borderRadius: '5px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
-              <div>
-                <strong>{item.nome}</strong><br />
-                <small style={{ color: '#777' }}>{item.descricao}</small>
-              </div>
-              <div>
-                <button onClick={() => editarItem(item._id)} style={buttonStyle('#3498db')}>Editar</button>
-                <button onClick={() => apagarItem(item._id)} style={buttonStyle('#e74c3c')}>Apagar</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+      {loading ? (
+        <p style={{ textAlign: 'center', color: '#555' }}>
+          ⏳ Aguarde, o servidor está sendo iniciado...
+        </p>
+      ) : (
+        <>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {items.map(item => (
+              <li key={item._id} style={{
+                background: '#fff',
+                padding: '10px',
+                marginBottom: '10px',
+                borderRadius: '5px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+              }}>
+                <div>
+                  <strong>{item.nome}</strong> <br />
+                  <small style={{ color: '#777' }}>{item.descricao}</small>
+                </div>
+                <div>
+                  <button onClick={() => editarItem(item._id)} style={buttonStyle('#3498db')}>Editar</button>
+                  <button onClick={() => apagarItem(item._id)} style={buttonStyle('#e74c3c')}>Apagar</button>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-        <h2 style={{ color: '#333' }}>➕ Criar novo item</h2>
-        <div style={{ display: 'flex', gap: '5px' }}>
-          <input
-            type="text"
-            placeholder="Nome"
-            value={nome}
-            onChange={e => setNome(e.target.value)}
-            style={inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="Descrição"
-            value={descricao}
-            onChange={e => setDescricao(e.target.value)}
-            style={inputStyle}
-          />
-          <button onClick={criarItem} style={buttonStyle('#2ecc71')}>Criar</button>
-        </div>
+          {items.length === 0 && (
+            <p style={{ textAlign: 'center', color: '#777' }}>Nenhum item encontrado.</p>
+          )}
+        </>
+      )}
+
+      <h2 style={{ color: '#333' }}>➕ Criar novo item</h2>
+      <div style={{ display: 'flex', gap: '5px' }}>
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={e => setNome(e.target.value)}
+          style={inputStyle}
+        />
+        <input
+          type="text"
+          placeholder="Descrição"
+          value={descricao}
+          onChange={e => setDescricao(e.target.value)}
+          style={inputStyle}
+        />
+        <button onClick={criarItem} style={buttonStyle('#2ecc71')}>Criar</button>
       </div>
     </div>
   );
 }
 
 const buttonStyle = (bgColor) => ({
-  background: `linear-gradient(45deg, ${bgColor}, #6ab7ff)`,
+  backgroundColor: bgColor,
   color: '#fff',
   border: 'none',
   borderRadius: '4px',
-  padding: '6px 12px',
-  cursor: 'pointer',
-  transition: '0.3s'
+  padding: '5px 10px',
+  marginLeft: '5px',
+  cursor: 'pointer'
 });
 
 const inputStyle = {
-  padding: '6px',
+  padding: '5px',
   borderRadius: '4px',
   border: '1px solid #ccc',
   flex: 1
