@@ -81,7 +81,8 @@ function App() {
             marginBottom: '10px',
             borderRadius: '5px',
             border: item.favorito ? '2px solid gold' : '1px solid #ccc',
-            boxShadow: item.favorito ? '0 0 10px gold' : 'none'
+            boxShadow: item.favorito ? '0 0 10px gold' : 'none',
+            transition: 'all 0.3s ease'
           }}>
             <strong>{item.nome}</strong> - {item.descricao}
             {item.favorito && ' ⭐'}
